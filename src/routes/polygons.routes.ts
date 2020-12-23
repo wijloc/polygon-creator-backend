@@ -9,7 +9,12 @@ const polygonsRouter = Router();
 
 polygonsRouter.get('/', async (request, response) => {
   const polygonRepository = getRepository(Polygon);
-  const polygons = await polygonRepository.find({ relations: ['points'] });
+  const polygons = await polygonRepository.find({
+    relations: ['points'],
+    order: { area: 'ASC', name: 'ASC' },
+  });
+  return response.json(polygons);
+});
   return response.json(polygons);
 });
 
