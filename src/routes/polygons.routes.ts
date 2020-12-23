@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { response, Router } from 'express';
 import { getRepository } from 'typeorm';
 
 import CreatePolygonService from '../services/CreatePolygonService';
@@ -15,6 +15,13 @@ polygonsRouter.get('/', async (request, response) => {
   });
   return response.json(polygons);
 });
+
+polygonsRouter.get('/:id', async (request, response) => {
+  const polygonRepository = getRepository(Polygon);
+  const polygons = await polygonRepository.findOne({
+    relations: ['points'],
+    where: { id: request.params.id },
+  });
   return response.json(polygons);
 });
 
