@@ -1,4 +1,4 @@
-import { response, Router } from 'express';
+import { Router } from 'express';
 import { getRepository } from 'typeorm';
 
 import CreatePolygonService from '../services/CreatePolygonService';
