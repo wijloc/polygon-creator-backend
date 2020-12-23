@@ -9,7 +9,11 @@ const pointsRouter = Router();
 
 pointsRouter.get('/', async (request, response) => {
   const pointRepository = getRepository(Point);
-  const points = await pointRepository.find();
+pointsRouter.get('/:polygon_id', async (request, response) => {
+  const pointsRepository = getRepository(Point);
+  const points = await pointsRepository.find({
+    where: { polygon_id: request.params.polygon_id },
+  });
   return response.json(points);
 });
 
