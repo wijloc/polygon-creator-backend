@@ -48,11 +48,10 @@ polygonsRouter.delete('/', async (request, response) => {
   const resultDelete = await deletePolygon.execute({
     id,
   });
-
   if ((resultDelete.affected || 0) > 0) {
     return response.status(200).json({ message: 'Record has been deleted' });
   }
-  return response.status(404).json({ message: 'Record not found' });
+  return response.json({ message: `Record not found (id: ${id})` });
 });
 
 export default polygonsRouter;
