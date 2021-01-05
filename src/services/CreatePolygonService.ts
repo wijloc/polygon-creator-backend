@@ -7,6 +7,7 @@ interface Request {
   points: {
     lat: string;
     lng: string;
+    order: number;
   };
 }
 

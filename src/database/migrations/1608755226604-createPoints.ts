@@ -31,6 +31,10 @@ export class createPoints1608755226604 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'order',
+            type: 'integer',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

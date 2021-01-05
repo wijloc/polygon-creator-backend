@@ -22,6 +22,9 @@ class Point {
   lng: string;
 
   @Column()
+  order: number;
+
+  @Column()
   polygon_id: string;
 
   @ManyToOne(() => Polygon, polygon => polygon.points)
