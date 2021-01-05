@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 
 import CreatePolygonService from '../services/CreatePolygonService';
+import DeletePolygonService from '../services/DeletePolygonService';
 
 import Polygon from '../models/Polygon';
 
@@ -37,6 +38,21 @@ polygonsRouter.post('/', async (request, response) => {
   });
 
   return response.json(polygon);
+});
+
+polygonsRouter.delete('/', async (request, response) => {
+  const { id } = request.body;
+
+  const deletePolygon = new DeletePolygonService();
+
+  const resultDelete = await deletePolygon.execute({
+    id,
+  });
+
+  if ((resultDelete.affected || 0) > 0) {
+    return response.status(200).json({ message: 'Record has been deleted' });
+  }
+  return response.status(404).json({ message: 'Record not found' });
 });
 
 export default polygonsRouter;
