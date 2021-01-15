@@ -15,6 +15,7 @@ polygonsRouter.get('/', async (request, response) => {
     .createQueryBuilder('polygons')
     .leftJoinAndSelect('polygons.points', 'points')
     .orderBy({
+      'polygons.area': 'ASC',
       'points.order': 'ASC',
     })
     .getMany();
