@@ -18,6 +18,8 @@ class CreateCustomersService {
   }: Request): Promise<Customer[]> {
     const customersRepository = getRepository(Customer);
 
+    await customersRepository.delete({ polygon_id });
+
     const createdCustomers = customers.map(customer => {
       return customersRepository.create({
         polygon_id,
