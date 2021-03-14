@@ -7,6 +7,12 @@ import Locker from '../models/Locker';
 
 const lockersRouter = Router();
 
+lockersRouter.get('/', async (request, response) => {
+  const lockersRepository = getRepository(Locker);
+  const lockers = await lockersRepository.find();
+  return response.json(lockers);
+});
+
 lockersRouter.get('/:polygon_id', async (request, response) => {
   const lockersRepository = getRepository(Locker);
   const lockers = await lockersRepository.find({

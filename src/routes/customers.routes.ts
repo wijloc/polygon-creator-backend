@@ -15,6 +15,12 @@ customersRouter.get('/:polygon_id', async (request, response) => {
   return response.json(customers);
 });
 
+customersRouter.get('/', async (request, response) => {
+  const customersRepository = getRepository(Customer);
+  const customers = await customersRepository.find();
+  return response.json(customers);
+});
+
 customersRouter.post('/', async (request, response) => {
   const { polygon_id, customers } = request.body;
 
