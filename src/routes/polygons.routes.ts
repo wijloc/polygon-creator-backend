@@ -6,6 +6,7 @@ import DeletePolygonService from '../services/DeletePolygonService';
 
 import Polygon from '../models/Polygon';
 import Point from '../models/Point';
+import Customer from '../models/Customer';
 
 const polygonsRouter = Router();
 
@@ -33,6 +34,23 @@ polygonsRouter.get('/:id', async (request, response) => {
     })
     .getOne();
   return response.json(polygons);
+});
+
+polygonsRouter.get('/:id/instance', async (request, response) => {
+  const customerRepository = getRepository(Customer);
+  const polygons = await customerRepository
+    .createQueryBuilder('customers')
+    .select(['customers.lat', 'customers.lng'])
+    .leftJoin('customers.polygon', 'polygons')
+    .where('polygons.id = :id', { id: request.params.id })
+    .orderBy({
+      'customers.created_at': 'ASC',
+    })
+    .getMany();
+  const textInstance = polygons
+    .map((customer, index) => `${index + 1} ${customer.lat} ${customer.lng}`)
+    .reduce((accumulator, current) => `${accumulator}\n${current}`);
+  return response.json({ instance: textInstance });
 });
 
 polygonsRouter.post('/', async (request, response) => {
