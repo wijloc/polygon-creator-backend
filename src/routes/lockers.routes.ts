@@ -13,6 +13,21 @@ lockersRouter.get('/', async (request, response) => {
   return response.json(lockers);
 });
 
+lockersRouter.get('/instance', async (request, response) => {
+  const lockerRepository = getRepository(Locker);
+  const polygons = await lockerRepository
+    .createQueryBuilder('lockers')
+    .select(['lockers.lat', 'lockers.lng'])
+    .orderBy({
+      'lockers.created_at': 'ASC',
+    })
+    .getMany();
+  const textInstance = polygons
+    .map((locker, index) => `${index + 1} ${locker.lat} ${locker.lng}`)
+    .reduce((accumulator, current) => `${accumulator}\n${current}`);
+  return response.json({ instance: textInstance });
+});
+
 lockersRouter.get('/:polygon_id', async (request, response) => {
   const lockersRepository = getRepository(Locker);
   const lockers = await lockersRepository.find({
