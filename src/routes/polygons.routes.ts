@@ -47,9 +47,9 @@ polygonsRouter.get('/:id/instance', async (request, response) => {
       'customers.created_at': 'ASC',
     })
     .getMany();
-  const textInstance = polygons
+  const textInstance = `${polygons
     .map((customer, index) => `${index + 1} ${customer.lat} ${customer.lng}`)
-    .reduce((accumulator, current) => `${accumulator}\n${current}`);
+    .reduce((accumulator, current) => `${accumulator}\n${current}`)}\n\r`;
   return response.json({ instance: textInstance });
 });
 

@@ -22,9 +22,9 @@ lockersRouter.get('/instance', async (request, response) => {
       'lockers.created_at': 'ASC',
     })
     .getMany();
-  const textInstance = polygons
+  const textInstance = `${polygons
     .map((locker, index) => `${index + 1} ${locker.lat} ${locker.lng}`)
-    .reduce((accumulator, current) => `${accumulator}\n${current}`);
+    .reduce((accumulator, current) => `${accumulator}\n${current}`)}\n\r`;
   return response.json({ instance: textInstance });
 });
 
