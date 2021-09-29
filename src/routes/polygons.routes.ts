@@ -8,6 +8,8 @@ import Polygon from '../models/Polygon';
 import Point from '../models/Point';
 import Customer from '../models/Customer';
 
+import Locker from '../models/Locker';
+
 const polygonsRouter = Router();
 
 polygonsRouter.get('/', async (request, response) => {
@@ -49,6 +51,23 @@ polygonsRouter.get('/:id/instance', async (request, response) => {
     .getMany();
   const textInstance = `${polygons
     .map((customer, index) => `${index + 1} ${customer.lat} ${customer.lng}`)
+    .reduce((accumulator, current) => `${accumulator}\n${current}`)}\n\r`;
+  return response.json({ instance: textInstance });
+});
+
+polygonsRouter.get('/:id/locker-instance', async (request, response) => {
+  const lockerRepository = getRepository(Locker);
+  const polygons = await lockerRepository
+    .createQueryBuilder('lockers')
+    .select(['lockers.lat', 'lockers.lng'])
+    .leftJoin('lockers.polygon', 'polygons')
+    .where('polygons.id = :id', { id: request.params.id })
+    .orderBy({
+      'lockers.created_at': 'ASC',
+    })
+    .getMany();
+  const textInstance = `${polygons
+    .map((locker, index) => `${index + 1} ${locker.lat} ${locker.lng}`)
     .reduce((accumulator, current) => `${accumulator}\n${current}`)}\n\r`;
   return response.json({ instance: textInstance });
 });
