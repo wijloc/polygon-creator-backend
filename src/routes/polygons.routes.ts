@@ -38,17 +38,23 @@ polygonsRouter.get('/:id', async (request, response) => {
   return response.json(polygons);
 });
 
-polygonsRouter.get('/:id/instance', async (request, response) => {
+polygonsRouter.get('/:id/instance/:day', async (request, response) => {
   const customerRepository = getRepository(Customer);
   const polygons = await customerRepository
     .createQueryBuilder('customers')
     .select(['customers.lat', 'customers.lng'])
     .leftJoin('customers.polygon', 'polygons')
-    .where('polygons.id = :id', { id: request.params.id })
+    .where('polygons.id = :id and customers.day = :day', {
+      id: request.params.id,
+      day: request.params.day,
+    })
     .orderBy({
       'customers.created_at': 'ASC',
     })
     .getMany();
+  if (polygons.length === 0) {
+    return response.json({ instance: 'empty' });
+  }
   const textInstance = `${polygons
     .map((customer, index) => `${index + 1} ${customer.lat} ${customer.lng}`)
     .reduce((accumulator, current) => `${accumulator}\n${current}`)}\n\r`;

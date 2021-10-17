@@ -23,6 +23,9 @@ class Customer {
   @Column()
   polygon_id: string;
 
+  @Column()
+  day: number;
+
   @CreateDateColumn()
   created_at: Date;
 
